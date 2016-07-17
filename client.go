@@ -6,6 +6,7 @@ import (
 	"errors"
 	"strings"
 	"math"
+        "os"
 )
 
 func request(url string, method string, body string) error {
