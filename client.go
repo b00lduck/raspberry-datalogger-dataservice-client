@@ -2,11 +2,12 @@ package client
 import (
 	"io/ioutil"
 	"net/http"
-	"fmt"
 	"errors"
 	"strings"
 	"math"
         "os"
+	log "github.com/Sirupsen/logrus"
+	"fmt"
 )
 
 func request(url string, method string, body string) error {
@@ -24,7 +25,6 @@ func request(url string, method string, body string) error {
 
 	if resp.StatusCode != 200 {
 		str, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println()
 		return errors.New(fmt.Sprintf("%d", resp.StatusCode) + " " + string(str))
 	}
 
@@ -42,25 +42,25 @@ func sendDataservicePost(url string, body string) error {
 }
 
 func SendCounterTick(code string) error {
-	fmt.Println("Dataservice client: " + code + ": TICK")
+	log.WithField("code", code).Info("Sending counter tick")
 	return sendDataservicePost("counter/" + code + "/tick", "")
 }
 
 func SendThermometerReading(code string, temp float64) error {
-	fmt.Println(code + ": " + fmt.Sprintf("%.2f", temp) + " C")
+	log.WithField("code", code).WithField("temp", fmt.Sprintf("%.2f°C", temp)).Info("Sending thermometer reading")
 	svalue := fmt.Sprintf("%.0f", Round(temp * 1000))
 	return sendDataservicePost("thermometer/" + code + "/reading", svalue)
 }
 
 func SendFlagState(code string, state uint8) error {
-	fmt.Println(code + ": " + fmt.Sprintf("%d", state))
+	log.WithField("code", code).WithField("state", state).Info("Sending flag state")
 	svalue := fmt.Sprintf("%d", state)
 	return sendDataservicePost("flag/" + code + "/state", svalue)
 }
 
 func SendCounterCorrection(code string, value int32) error {
 	svalue := fmt.Sprintf("%d", value)
-	fmt.Println("Dataservice client: " + code + ": correction to " + svalue)
+	log.WithField("code", code).WithField("value", value).Info("Sending counter correction")
 	return sendDataservicePut("counter/" + code + "/corr", svalue)
 }
 
