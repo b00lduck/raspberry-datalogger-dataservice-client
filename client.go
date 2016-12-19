@@ -60,7 +60,7 @@ func SendCounterTick(code string) error {
 
 func SendThermometerReading(code string, temp float64) error {
 	log.WithField("code", code).WithField("temp", fmt.Sprintf("%.2f°C", temp)).Info("Sending thermometer reading")
-	svalue := fmt.Sprintf("%.0f", Round(temp * 1000))
+	svalue := fmt.Sprintf("%.2f", temp)
 	return sendDataservicePut("thermometer/" + code, svalue)
 }
 
