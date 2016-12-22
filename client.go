@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"errors"
 	"strings"
-	"math"
     "os"
 	log "github.com/Sirupsen/logrus"
 	"fmt"
@@ -64,9 +63,14 @@ func SendThermometerReading(code string, temp float64) error {
 	return sendDataservicePut("thermometer/" + code, svalue)
 }
 
-func SendFlagState(code string, state uint8) error {
+func SendFlagState(code string, state bool) error {
 	log.WithField("code", code).WithField("state", state).Info("Sending flag state")
-	svalue := fmt.Sprintf("%d", state)
+	var svalue string
+    if state {
+        svalue = "1"
+    } else {
+        svalue = "0"
+    }
 	return sendDataservicePut("flag/" + code, svalue)
 }
 
@@ -74,8 +78,4 @@ func SendCounterCorrection(code string, value int32) error {
 	svalue := fmt.Sprintf("%d", value)
 	log.WithField("code", code).WithField("value", value).Info("Sending counter correction")
 	return sendDataservicePut("counter/" + code, svalue)
-}
-
-func Round(f float64) float64 {
-        return math.Floor(f + .5)
 }
