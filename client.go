@@ -20,9 +20,12 @@ func request(url string, method string, body string) (string, error) {
 	req.Header.Set("Content-Type", "text/plain")
 
 	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
 	defer resp.Body.Close()
 
-    str, _ := ioutil.ReadAll(resp.Body)
+	str, _ := ioutil.ReadAll(resp.Body)
 	if resp.StatusCode != 200 {
 		return "", errors.New(fmt.Sprintf("%d", resp.StatusCode) + " " + string(str))
 	}
