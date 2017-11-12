@@ -35,19 +35,25 @@ func request(url string, method string, body string) (string, error) {
 
 func sendDataservicePut(url string, body string) error {
     dataservice := os.Getenv("DATASERVICE_HOST")
-    _, err := request("http://" + dataservice + "/" + url, "PUT", body)
+    fullUrl := "http://" + dataservice + "/" + url
+    log.WithField("url", url).WithField("fullUrl", fullUrl).Info("Sending PUT")
+    _, err := request(fullUrl, "PUT", body)
     return err
 }
 
 func sendDataservicePost(url string, body string) error {
     dataservice := os.Getenv("DATASERVICE_HOST")
-    _, err := request("http://" + dataservice + "/" + url, "POST", body)
+    fullUrl := "http://" + dataservice + "/" + url
+    log.WithField("url", url).WithField("fullUrl", fullUrl).Info("Sending POST")
+    _, err := request(fullUrl, "POST", body)
     return err
 }
 
 func sendDataserviceGet(url string) (string, error) {
     dataservice := os.Getenv("DATASERVICE_HOST")
-    return request("http://" + dataservice + "/" + url, "GET", "")
+    fullUrl := "http://" + dataservice + "/" + url
+    log.WithField("url", url).WithField("fullUrl", fullUrl).Info("Sending GET")
+    return request(fullUrl, "GET", "")
 }
 
 func GetCounter(code string) (string, error) {
