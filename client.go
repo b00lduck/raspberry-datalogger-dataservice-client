@@ -72,6 +72,12 @@ func SendThermometerReading(code string, temp float64) error {
 	return sendDataservicePut("thermometer/" + code, svalue)
 }
 
+func SendPercentage(code string, percent float64) error {
+	log.WithField("code", code).WithField("percent", fmt.Sprintf("%.1f", percent)).Info("Sending percentager reading")
+	svalue := fmt.Sprintf("%.1f", percent)
+	return sendDataservicePut("percentage/" + code, svalue)
+}
+
 func SendFlagState(code string, state bool) error {
 	log.WithField("code", code).WithField("state", state).Info("Sending flag state")
 	var svalue string
